@@ -1,0 +1,21 @@
+.footer {
+    padding-left: 279px;
+}
+
+@media (max-width: 1200px) {
+    .footer {
+        padding-left: 248px;
+    }
+}
+
+@media (max-width: 992px) {
+    .footer {
+        padding-left: 0;
+    }
+}
+
+.contactTitle {
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: 700;
+}

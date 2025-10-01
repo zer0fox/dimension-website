@@ -1,0 +1,22 @@
+.contact{
+   > div{
+      margin-bottom: 2rem;
+      &:last-of-type{
+         margin-bottom: 0;
+      }
+   }
+   .form{
+      &__group{
+         margin-bottom: 1rem;
+      }
+      margin-bottom: 2rem;
+      &__submit{
+         padding: .5rem 6rem;
+         background-color: $color-primary-light;
+         color: $color-white;
+         &:hover{
+            background-color: $color-primary-medium;
+         }
+      }
+   }
+}

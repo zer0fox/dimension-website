@@ -1,0 +1,25 @@
+.homeBanner {
+    width: 725px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+
+    text-align: right;
+    padding-top: 27px;
+
+    @media (max-width: 1200px) {
+        width: 588px;
+    }
+
+    @media (max-width: 992px) {
+        width: 100%;
+        position: relative !important;
+    }
+
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.title {
+    font-weight: 700;
+}
