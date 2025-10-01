@@ -6,7 +6,13 @@ const Paros = () => {
         <div>
             <Content
                 title="Four Summer Houses"
-                text='Πρόκειται για τέσσερεις ανεξάρτητες κατοικίες  οι οποίες λειτουργούν ως τουριστικά καταλύματα. Βασική πρόθεση υπήρξε η δημιουργία ενός κατακερματισμένου όγκου ο οποίος "αγκαλιάζει" το τοπίο και προσαρμόζεται στην φυσική μορφολογία του εδάφους. Το λευκό χρώμα της κυκλαδίτικης αρχιτεκτονικής συνεργάζεται αρμονικά με την πέτρα. Τα γήινα χρώματα εξυπηρετούν τον ίδιο σκοπό.'
+                text="This project is located on Paros Island and consists of
+four independent luxury suites
+, mainly intended for
+tourists during the summer season. Our main concept was to design a fragmented volume that embraces the
+landscape and adapts to the natural morphology of the site. The characteristic “white” of Cycladic architecture
+harmonizes beautifully with the stone, while the deliberate use of earthy tones further enhances the integration
+with the surroundings."
             />
             <Content
                 image="/img/projects/residential/paros2020/paros-1.jpg"
