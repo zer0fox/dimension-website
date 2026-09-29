@@ -1,0 +1,56 @@
+@use "sass:map";
+
+// -- grid breakpoint -- //
+$grid-breakpoints-up: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+$grid-breakpoints-down: (
+  xs: 575.98px,
+  sm: 767.98px,
+  md: 991.98px,
+  lg: 1199.98px
+);
+@mixin media-breakpoint-up($size){
+   @media (min-width: #{map.get($grid-breakpoints-up, $size)}) {
+     @content;
+   }
+}
+
+@mixin media-breakpoint-down($size){
+   @media (max-width: #{map.get($grid-breakpoints-down, $size)}) {
+     @content;
+   }
+}
+
+@mixin media-breakpoint-only($size){
+   @if $size == xs {
+      @media (max-width: #{map.get($grid-breakpoints-down, $size)}) {
+         @content;
+      }
+   } @else if $size == lg {
+      @media (min-width: #{map.get($grid-breakpoints-up, $size)}) {
+
+      }
+   } @else if $size == lg {
+      @media (min-width: #{map.get($grid-breakpoints-up, $size)}) and (max-width: #{map.get($grid-breakpoints-down, $size)}) {
+         @content;
+      }
+   }
+}
+
+@mixin media-breakpoint-between($from, $to){
+   @media (min-width: #{map.get($grid-breakpoints-up, $from)}) and (max-width: #{map.get($grid-breakpoints-down, $to)}) {
+      @content;
+   }
+}
+
+// -- tools -- //
+@mixin center-box {
+   position: absolute;
+   top: 50%;
+   right: 50%;
+   transform: translate(50%, -50%);
+}

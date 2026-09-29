@@ -55,3 +55,11 @@ CREATE TABLE IF NOT EXISTS page_items (
 CREATE INDEX IF NOT EXISTS idx_projects_category    ON projects(category_id, sort_order);
 CREATE INDEX IF NOT EXISTS idx_project_images_proj  ON project_images(project_id, sort_order);
 CREATE INDEX IF NOT EXISTS idx_page_items_page      ON page_items(page_id, sort_order);
+
+CREATE TABLE IF NOT EXISTS settings (
+    key    TEXT PRIMARY KEY,
+    value  TEXT NOT NULL
+);
+
+-- Folder name under src/templates used when building the site.
+INSERT OR IGNORE INTO settings (key, value) VALUES ('active_template', 'default');

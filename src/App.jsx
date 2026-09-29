@@ -1,40 +1,20 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './Layout/Header';
-import Footer from './Layout/Footer';
-import Hamburger from './components/Hamburger';
-import Home from './Pages/Home';
-import Category from './Pages/Category';
-import Project from './Pages/Project';
-import About from './Pages/About';
-import Contact from './Pages/Contact';
-import PageNotFound from './Pages/PageNotFound';
+import { Layout, Home, Category, Project, About, Contact, NotFound } from '@template';
 
+// Routes are fixed for every template; templates only provide the components.
 function App() {
   return (
     <Router>
-      <Hamburger />
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12 col-lg-3">
-            <Header />
-          </div>
-          <div className="col-md-12 col-lg-9">
-            <div className="content content-container">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/projects/:categorySlug" element={<Category />} />
-                <Route path="/projects/:categorySlug/:projectSlug" element={<Project />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-            </div>
-          </div>
-        </div>
-        <div className="row d-block d-sm-block d-md-block d-lg-block">
-          <Footer />
-        </div>
-      </div>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="projects/:categorySlug" element={<Category />} />
+          <Route path="projects/:categorySlug/:projectSlug" element={<Project />} />
+          <Route path="about" element={<About />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }

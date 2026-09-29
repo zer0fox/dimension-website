@@ -7,29 +7,56 @@ const dbDir = path.dirname(fileURLToPath(import.meta.url));
 
 export const DB_PATH = path.join(dbDir, 'site.db');
 
+const readSql = (file) => readFileSync(path.join(dbDir, file), 'utf8');
+
+// Creates the database from schema + seed, or applies the (idempotent) schema to an existing one.
 export function createDatabase({ reset = false } = {}) {
     if (reset) rmSync(DB_PATH, { force: true });
-    if (existsSync(DB_PATH)) return false;
+    const isNew = !existsSync(DB_PATH);
 
     const db = new DatabaseSync(DB_PATH);
     try {
-        db.exec(readFileSync(path.join(dbDir, 'schema.sql'), 'utf8'));
-        db.exec('BEGIN');
-        db.exec(readFileSync(path.join(dbDir, 'seed.sql'), 'utf8'));
-        db.exec('COMMIT');
+        db.exec(readSql('schema.sql'));
+        if (isNew) {
+            db.exec('BEGIN');
+            db.exec(readSql('seed.sql'));
+            db.exec('COMMIT');
+        }
     } catch (error) {
         db.close();
-        rmSync(DB_PATH, { force: true });
+        if (isNew) rmSync(DB_PATH, { force: true });
         throw error;
     }
     db.close();
-    return true;
+    return isNew;
 }
 
-export function readSiteData() {
+function withDatabase(callback) {
     createDatabase();
     const db = new DatabaseSync(DB_PATH, { readOnly: true });
     try {
+        return callback(db);
+    } finally {
+        db.close();
+    }
+}
+
+export function getSetting(key) {
+    return withDatabase((db) => db.prepare('SELECT value FROM settings WHERE key = ?').get(key)?.value);
+}
+
+export function setSetting(key, value) {
+    createDatabase();
+    const db = new DatabaseSync(DB_PATH);
+    try {
+        db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').run(key, value);
+    } finally {
+        db.close();
+    }
+}
+
+export function readSiteData() {
+    return withDatabase((db) => {
         const categories = db.prepare(`
             SELECT id, slug, name FROM categories
             WHERE visible = 1
@@ -88,7 +115,5 @@ export function readSiteData() {
                     })),
             }])),
         };
-    } finally {
-        db.close();
-    }
+    });
 }

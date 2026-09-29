@@ -1,0 +1,62 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixings" as *;
+
+.header {
+	width: 22rem;
+	bottom: 0;
+	text-align: right;
+	z-index: 9;
+	position: fixed;
+	top: 34.4%;
+	transform: translate(0, -41%);
+	@include media-breakpoint-down(md) {
+	   width: auto;
+		text-align: center;
+
+		position: relative;
+		top:0;
+		transform: none;
+	}
+	> div {
+		> nav{
+			a{
+				width: 100%;
+				display: block;
+				padding: 0 0.3rem;
+				opacity: 0;
+				font-size: 2.6rem;
+				animation: fadeInSlideFromLeft .6s ease-out forwards;
+				transition: color 0.5s ease;
+
+				&:nth-of-type(1){
+				  animation-delay: .1s;
+				}
+				&:nth-of-type(2){
+				  animation-delay: .2s;
+				}
+				&:nth-of-type(3){
+				  animation-delay: .3s;
+				}
+				&:nth-of-type(4){
+				  animation-delay: .4s;
+				}
+				&.active{
+					color: $color-primary-light;
+				}
+			}
+			padding-bottom: $general-element-spacing;
+		}
+	}
+	.header {
+	   &__logo {
+			padding: 0 0 $general-element-spacing 0;
+			animation: fadeIn 1s ease-out;
+			@include media-breakpoint-down(md) {
+				padding: $general-element-spacing 0 0 0;
+			}
+			img {
+				width: 220px;
+			}
+	   }
+	}
+}

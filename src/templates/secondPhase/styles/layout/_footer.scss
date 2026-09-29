@@ -1,0 +1,11 @@
+.footer {
+   text-align: center;
+   margin-top: 3rem;
+   &__social{
+      > a{
+         > img{
+            margin: 0 .8rem .8rem;
+         }
+      }
+   }
+}
