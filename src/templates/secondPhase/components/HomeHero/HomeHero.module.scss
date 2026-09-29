@@ -1,0 +1,123 @@
+@use '../../styles/variables' as *;
+@use '../../styles/animations';
+
+@include animations.fade-in;
+@include animations.ken-burns;
+@include animations.scroll-cue;
+
+// --hero-progress goes 0 -> 1 over the first viewport of scrolling (set from HomeHero.jsx).
+.hero {
+    --hero-progress: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background-color: $color-primary-dark;
+    color: $font-color-light;
+    z-index: 0;
+}
+
+.slides {
+    position: absolute;
+    inset: 0;
+    transform: scale(calc(1 + var(--hero-progress) * 0.1));
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.8s ease;
+}
+
+.active {
+    opacity: 1;
+    animation: kenBurns 8s ease-out forwards;
+}
+
+.shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba($color-black, 0.45) 0%, rgba($color-black, 0.35) 50%, rgba($color-black, 0.65) 100%);
+    opacity: calc(1 + var(--hero-progress));
+}
+
+.content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    padding: 0 2rem;
+    text-align: center;
+    transform: translateY(calc(-50% - var(--hero-progress) * 15vh));
+    opacity: calc(1 - var(--hero-progress) * 1.8);
+    animation: fadeIn 1.2s ease-out;
+    // logo.png has an opaque white background: it is inverted to black and screened away.
+    // Set here, not on the img, because .content's transform isolates its children from the hero.
+    mix-blend-mode: screen;
+}
+
+.logo {
+    width: min(52rem, 80vw);
+    filter: grayscale(1) invert(1);
+}
+
+.title {
+    margin: 4rem 0 0;
+    font-size: clamp(2rem, 2.4vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0.6em;
+    text-indent: 0.6em;
+}
+
+.subtitle {
+    margin: 0.5rem 0 0;
+    font-size: 1.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 3rem;
+    transform: translateX(-50%);
+    padding: 0 0 6rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 1.2rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: calc(1 - var(--hero-progress) * 4);
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        width: 1px;
+        height: 5rem;
+        background-color: currentColor;
+        transform-origin: top;
+        animation: scrollCue 2s ease-in-out infinite;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .active,
+    .content,
+    .scroll::after {
+        animation: none;
+    }
+
+    .slide {
+        transition: none;
+    }
+}

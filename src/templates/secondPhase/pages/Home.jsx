@@ -1,21 +1,33 @@
-import Content from '../components/Content';
-import HomeBanner from '../components/HomeBanner';
+import HomeHero from '../components/HomeHero';
+import Gallery from '../components/Gallery';
 import usePage from '@/hooks/usePage';
+import useSite from '@/hooks/useSite';
+import useHomeGallery from '@/hooks/useHomeGallery';
+
+const GALLERY_ID = 'work';
 
 const Home = () => {
     const page = usePage('home');
+    const site = useSite();
+    const gallery = useHomeGallery();
+
     return (
         <div>
-            <HomeBanner title={page.heading ?? undefined} subtitle={page.subheading ?? undefined} />
-            {page.items.map((item, index) => (
-                <Content
-                    key={index}
-                    to={item.link ?? undefined}
-                    image={item.image}
-                    alt={item.alt}
-                    imageTitle={item.imageTitle ?? undefined}
-                />
-            ))}
+            <HomeHero
+                title={page.heading ?? undefined}
+                subtitle={page.subheading ?? undefined}
+                logoAlt={site.name}
+                slides={gallery.slides}
+                targetId={GALLERY_ID}
+            />
+            <Gallery
+                id={GALLERY_ID}
+                title="Projects & Journal"
+                filters={gallery.filters}
+                active={gallery.active}
+                onFilter={gallery.setActive}
+                items={gallery.items}
+            />
         </div>
     );
 };

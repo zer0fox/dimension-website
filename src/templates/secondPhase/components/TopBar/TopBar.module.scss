@@ -1,0 +1,114 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// Stays below the Hamburger overlay (z-index 999+).
+.bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
+    height: 9rem;
+    padding: 0 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $font-color-light;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease, height 0.4s ease;
+    pointer-events: none;
+
+    > * {
+        pointer-events: auto;
+    }
+
+    &.solid {
+        height: 8rem;
+        color: $font-color;
+        background-color: rgba($background-color-default, 0.96);
+        box-shadow: 0 0.5rem 2rem rgba($color-black, 0.08);
+    }
+}
+
+// The hero already shows the big logo, so the bar's logo only fades in once it is solid.
+.logo {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+
+    .solid & {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    img {
+        width: 18rem;
+
+        @include media-breakpoint-down(sm) {
+            width: 14rem;
+        }
+    }
+}
+
+.nav {
+    align-items: center;
+    gap: 4rem;
+}
+
+.link,
+.link:focus {
+    padding: 0.5rem 0;
+    border: 0;
+    background: none;
+    font-size: 1.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: inherit;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.link:hover,
+.link:global(.active) {
+    color: $color-primary-medium;
+}
+
+.solid .link:hover,
+.solid .link:global(.active) {
+    color: $color-primary-light;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.menu {
+    position: absolute;
+    top: 100%;
+    left: -2rem;
+    min-width: 20rem;
+    padding: 1rem 0;
+    background-color: $background-color-default;
+    box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.5rem);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+
+    .dropdown:hover &,
+    .dropdown:focus-within & {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    a {
+        display: block;
+        padding: 0.6rem 2rem;
+        font-size: 1.5rem;
+        color: $font-color-link;
+    }
+
+    a:hover {
+        color: $color-primary-light;
+    }
+}
