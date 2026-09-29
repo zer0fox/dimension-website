@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import useSite from '@/hooks/useSite';
 import styles from './Footer.module.scss';
+import { asset } from '@/data/siteData';
 
 const Footer = ({ isInHeader = false }) => {
     const site = useSite();
@@ -10,10 +11,10 @@ const Footer = ({ isInHeader = false }) => {
             <div className={`${styles.text} ${styles.social}`}>
                 {!isInHeader && <div className={styles.contactTitle}>Contact Details</div>}
                 <a href={`mailto:${site.email}`}>
-                    <img src="/img/social-mail.svg" alt="Mail" />
+                    <img src={asset('/img/social-mail.svg')} alt="Mail" />
                 </a>
                 <a href={site.instagramUrl} target="_blank" rel="noopener noreferrer">
-                    <img src="/img/social-instagram.svg" alt="Instagram" />
+                    <img src={asset('/img/social-instagram.svg')} alt="Instagram" />
                 </a>
             </div>
             <div className={styles.text}>{site.copyright}</div>

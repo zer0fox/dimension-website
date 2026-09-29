@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HomeHero.module.scss';
+import { asset } from '@/data/siteData';
 
 const SLIDE_DURATION = 6000;
 
@@ -53,7 +54,7 @@ const HomeHero = ({ title, subtitle, logoAlt, slides, targetId }) => {
             </div>
             <div className={styles.shade} />
             <div className={styles.content}>
-                <img className={styles.logo} src="/img/logo.png" alt={logoAlt} />
+                <img className={styles.logo} src={asset('/img/logo.png')} alt={logoAlt} />
                 {title && <h1 className={styles.title}>{title}</h1>}
                 {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
             </div>

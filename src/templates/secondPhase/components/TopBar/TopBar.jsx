@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useProjectsMenu from '@/hooks/useProjectsMenu';
 import styles from './TopBar.module.scss';
+import { asset } from '@/data/siteData';
 
 // Home-page navigation: transparent over the hero, solid once the hero is scrolled away.
 const TopBar = ({ solid }) => {
@@ -10,7 +11,7 @@ const TopBar = ({ solid }) => {
     return (
         <header className={solid ? `${styles.bar} ${styles.solid}` : styles.bar}>
             <NavLink to="/" className={styles.logo} tabIndex={solid ? undefined : -1}>
-                <img src="/img/logo.png" alt="Logo" />
+                <img src={asset('/img/logo.png')} alt="Logo" />
             </NavLink>
             <nav className={`${styles.nav} d-none d-lg-flex`}>
                 <div className={styles.dropdown}>

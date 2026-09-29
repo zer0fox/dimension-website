@@ -1,6 +1,6 @@
-import { categories, categoryPath, getCategory, getPage, getProject, projectPath, projectSubtitle, site } from '@/data/siteData';
+import { categories, categoryPath, getCategory, getPage, getProject, projectPath, projectSubtitle, site, unprefixAsset } from '@/data/siteData';
 
-export const absoluteUrl = (path) => new URL(path, site.url).href;
+export const absoluteUrl = (path) => new URL(unprefixAsset(path), site.url).href;
 
 export const normalizePath = (pathname) => pathname.replace(/\/+$/, '') || '/';
 
