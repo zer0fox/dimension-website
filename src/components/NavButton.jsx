@@ -1,23 +1,14 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
-class NavButton extends Component {
-    static propTypes = {
-        text: PropTypes.string.isRequired,
-        href: PropTypes.string.isRequired,
-        onClick: PropTypes.func,
-        className: PropTypes.string
-    };
-    static defaultProps = {
-        onClick: () => { }
-    };
+const NavButton = ({ text, to, onClick }) => (
+    <NavLink to={to} className="nav__link" onClick={onClick}>{text}</NavLink>
+);
 
+NavButton.propTypes = {
+    text: PropTypes.string.isRequired,
+    to: PropTypes.string.isRequired,
+    onClick: PropTypes.func,
+};
 
-    render() {
-        return (
-            <NavLink to={"/" + this.props.href} className={"nav__link" + (this.props.className ? " " + this.props.className : "")} onClick={this.props.onClick}>{this.props.text}</NavLink>
-        );
-    }
-}
 export default NavButton;

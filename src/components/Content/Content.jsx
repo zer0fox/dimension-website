@@ -1,37 +1,30 @@
-import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import ContentText from './ContentText';
 import ContentImage from './ContentImage';
-import { NavLink } from "react-router-dom";
-import PropTypes from 'prop-types';
 
-class Content extends Component {
-    static propTypes = {
-        href: PropTypes.string,
-        title: PropTypes.string,
-        text: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-        image: PropTypes.string,
-        imageTitle: PropTypes.string,
-        imageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-        alt: PropTypes.string
-    };
-    static defaultProps = {
-        href: ""
-    };
-    render() {
-        let content = null;
-        content = [];
-        content.push(<ContentText {...this.props} key="content-text" />);
-        if (this.props.href !== "") {
-            content.push(<NavLink to={"/" + this.props.href} className="nav__link" key="nav-link">
-                <ContentImage {...this.props} />
-            </NavLink>);
-        } else {
-            content.push(<ContentImage {...this.props} key="content-image" />);
-        }
-        return <div className="content__item">
-            {content}
-        </div>;
-    }
-}
+const Content = ({ to, title, text, ...imageProps }) => (
+    <div className="content__item">
+        <ContentText title={title} text={text} />
+        {to ? (
+            <NavLink to={to} className="nav__link">
+                <ContentImage {...imageProps} />
+            </NavLink>
+        ) : (
+            <ContentImage {...imageProps} />
+        )}
+    </div>
+);
+
+Content.propTypes = {
+    to: PropTypes.string,
+    title: PropTypes.string,
+    text: PropTypes.node,
+    image: PropTypes.string,
+    imageTitle: PropTypes.string,
+    imageText: PropTypes.string,
+    imageNote: PropTypes.string,
+    alt: PropTypes.string,
+};
 
 export default Content;

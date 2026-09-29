@@ -1,8 +1,13 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './Layout/Header';
 import Footer from './Layout/Footer';
-import Page from './Layout/Page';
 import Hamburger from './components/Hamburger';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from './Pages/Home';
+import Category from './Pages/Category';
+import Project from './Pages/Project';
+import About from './Pages/About';
+import Contact from './Pages/Contact';
+import PageNotFound from './Pages/PageNotFound';
 
 function App() {
   return (
@@ -14,13 +19,16 @@ function App() {
             <Header />
           </div>
           <div className="col-md-12 col-lg-9">
-            <Routes>
-              <Route path="/" element={<Page name="home" />} />
-              <Route path="/projects/*" element={<Page name="projects" />} />
-              <Route path="/about" element={<Page name="about" />} />
-              <Route path="/contact" element={<Page name="contact" />} />
-              <Route path="*" element={<Page name="404" />} />
-            </Routes>
+            <div className="content content-container">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/projects/:categorySlug" element={<Category />} />
+                <Route path="/projects/:categorySlug/:projectSlug" element={<Project />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </div>
           </div>
         </div>
         <div className="row d-block d-sm-block d-md-block d-lg-block">

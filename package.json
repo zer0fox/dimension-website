@@ -3,11 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:init": "node scripts/db.js init",
+    "db:reset": "node scripts/db.js reset"
   },
   "dependencies": {
     "bootstrap": "4.3.1",

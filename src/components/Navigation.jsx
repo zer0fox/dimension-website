@@ -1,33 +1,39 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import NavButton from './NavButton';
+import { categories, categoryPath } from '../data/siteData';
 
-class Navigation extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { projectsShowMore: false }
-    }
+const Navigation = ({ className, onNavigate }) => {
+    const [showProjects, setShowProjects] = useState(false);
 
-    toggleProjectsShowMore = (e) => {
-        e.preventDefault();
-        this.setState({ projectsShowMore: !this.state.projectsShowMore });
+    const toggleProjects = (event) => {
+        event.preventDefault();
+        setShowProjects((show) => !show);
     };
 
-    render() {
-        return (
-            <nav>
-                <NavButton text="Home" href="" />
-                <NavButton text="Projects" href="projects" onClick={this.toggleProjectsShowMore} />
-                <div className={"show-more" + (this.state.projectsShowMore ? " show" : "")}>
-                    <NavButton text="Residential▐" href="projects/residential" />
-                    <NavButton text="Offices▐" href="projects/offices" />
-                    <NavButton text="Commercial▐" href="projects/commercial" />
-                    <NavButton text="Graphic▐" href="projects/graphic" />
-                </div>
-                <NavButton text="About" href="about" />
-                {/* <NavButton text="Contact" href="contact" /> */}
-            </nav>
-        );
-    }
-}
+    return (
+        <nav className={className}>
+            <NavButton text="Home" to="/" onClick={onNavigate} />
+            <NavButton text="Projects" to="/projects" onClick={toggleProjects} />
+            <div className={'show-more' + (showProjects ? ' show' : '')}>
+                {categories.map((category) => (
+                    <NavButton
+                        key={category.slug}
+                        text={category.name + '\u2590'}
+                        to={categoryPath(category)}
+                        onClick={onNavigate}
+                    />
+                ))}
+            </div>
+            <NavButton text="About" to="/about" onClick={onNavigate} />
+            {/* <NavButton text="Contact" to="/contact" onClick={onNavigate} /> */}
+        </nav>
+    );
+};
+
+Navigation.propTypes = {
+    className: PropTypes.string,
+    onNavigate: PropTypes.func,
+};
 
 export default Navigation;
