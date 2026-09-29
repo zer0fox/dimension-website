@@ -1,3 +1,6 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixings" as *;
+
 .content {
    padding: 122px 5rem 3rem;
    @include media-breakpoint-down(md) {

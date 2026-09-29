@@ -1,3 +1,6 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixings" as *;
+
 .header {
 	width: 22rem;
 	bottom: 0;

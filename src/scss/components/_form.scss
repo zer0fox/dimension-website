@@ -1,3 +1,5 @@
+@use "../abstracts/variables" as *;
+
 .form{
    input, textarea{
       font-family: inherit; // input does not apply font style automatically
