@@ -10,11 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        # node:sqlite (used by the build) needs Node >= 22.13
-        node-version: [22.x, 24.x]
-
     steps:
       - uses: actions/checkout@v4
 
@@ -22,10 +17,10 @@ jobs:
         with:
           version: 10
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          # node:sqlite (used by the build) needs Node >= 22.13
+          node-version: 24
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
@@ -33,7 +28,6 @@ jobs:
       - run: pnpm build
 
       - uses: actions/upload-artifact@v4
-        if: matrix.node-version == '24.x'
         with:
           name: dist
           path: dist
