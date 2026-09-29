@@ -1,0 +1,71 @@
+@use '../../styles/variables' as *;
+@use '../../styles/animations';
+
+@include animations.fade-in-slide-from-top;
+
+.item {
+    position: relative;
+    margin-top: $general-element-spacing;
+    padding: 0.1rem; // thin frame in the background colour
+    animation: fadeInSlideFromTop 0.5s ease-out;
+    background-color: $color-primary-gray;
+
+    > div {
+        position: relative;
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
+.text {
+    padding: 2rem 3.5rem;
+}
+
+.overlay {
+    overflow: hidden;
+}
+
+.overlay,
+.overlayMask,
+.overlayText {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.overlayMask {
+    opacity: 0;
+    transition: 0.4s ease;
+    background-color: $color-black;
+}
+
+.overlayText {
+    color: $color-white;
+    opacity: 0;
+    transition: 0.4s ease;
+    padding: 2rem;
+
+    > div {
+        position: absolute;
+        bottom: 1rem;
+    }
+}
+
+.smallText {
+    font-size: 14px;
+    color: #d7cbcb;
+}
+
+.overlay:hover .overlayMask {
+    opacity: 0.8;
+}
+
+.overlay:hover .overlayText {
+    opacity: 1;
+}

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import NavButton from './NavButton';
 import useProjectsMenu from '@/hooks/useProjectsMenu';
+import styles from './Navigation.module.scss';
 
 const Navigation = ({ className, onNavigate }) => {
     const { open, toggle, categories } = useProjectsMenu();
@@ -9,7 +10,7 @@ const Navigation = ({ className, onNavigate }) => {
         <nav className={className}>
             <NavButton text="Home" to="/" onClick={onNavigate} />
             <NavButton text="Projects" to="/projects" onClick={toggle} />
-            <div className={'show-more' + (open ? ' show' : '')}>
+            <div className={open ? `${styles.showMore} ${styles.open}` : styles.showMore}>
                 {categories.map((category) => (
                     <NavButton key={category.slug} text={category.name + '\u2590'} to={category.to} onClick={onNavigate} />
                 ))}

@@ -1,0 +1,14 @@
+.showMore {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s ease, color 0.5s ease !important;
+
+    &.open {
+        // Parents can raise the limit (the mobile menu uses larger links).
+        max-height: var(--show-more-max-height, 136px);
+    }
+
+    > a {
+        font-size: 20px !important;
+    }
+}

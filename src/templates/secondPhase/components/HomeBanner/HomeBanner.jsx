@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import styles from './HomeBanner.module.css';
+import styles from './HomeBanner.module.scss';
 
 const HomeBanner = ({ title, subtitle }) => (
     <div className={styles.homeBanner}>
