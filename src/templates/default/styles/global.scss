@@ -1,11 +1,47 @@
-@use "./base/fonts";
-@use "./base/animations";
-@use "./base/base";
-@use "./base/typography";
-@use "./layout/header";
-@use "./layout/footer";
-@use "./components/navigation";
-@use "./components/content";
-@use "./components/contact";
-@use "./components/form";
-@use "./extra/showmore";
+// Element-level styles only; component styles live next to each component in *.module.scss.
+@use 'variables' as *;
+
+@font-face {
+    font-family: lato;
+    src: url('/fonts/Lato-Regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: lato;
+    src: url('/fonts/Lato-Bold.ttf');
+    font-weight: 700;
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%; // 1rem = 10px
+}
+
+body {
+    box-sizing: border-box;
+    font-family: 'lato', sans-serif;
+    font-weight: 400;
+    font-size: $font-size-default;
+    line-height: 1.7;
+    color: $font-color;
+}
+
+a,
+a:focus {
+    color: $font-color-link;
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    color: $color-primary-light;
+    text-decoration: none;
+}

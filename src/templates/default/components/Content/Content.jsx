@@ -2,12 +2,13 @@ import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import ContentText from './ContentText';
 import ContentImage from './ContentImage';
+import styles from './Content.module.scss';
 
 const Content = ({ to, title, text, ...imageProps }) => (
-    <div className="content__item">
+    <div className={styles.item}>
         <ContentText title={title} text={text} />
         {to ? (
-            <NavLink to={to} className="nav__link">
+            <NavLink to={to}>
                 <ContentImage {...imageProps} />
             </NavLink>
         ) : (

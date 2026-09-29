@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/main.scss';
+import './styles/global.scss';
 
 // Every template must export exactly these components.
 export { default as Layout } from './Layout';

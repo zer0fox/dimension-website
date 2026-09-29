@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import styles from './Content.module.scss';
 
 const ContentImage = ({ image, alt = '', imageTitle, imageText, imageNote }) => {
     if (!image) return null;
@@ -7,14 +8,14 @@ const ContentImage = ({ image, alt = '', imageTitle, imageText, imageNote }) => 
         <div>
             <img src={image} alt={alt} />
             {hasOverlay && (
-                <div className="content__overlay">
-                    <div className="content__overlay-mask"></div>
-                    <div className="content__overlay-text">
+                <div className={styles.overlay}>
+                    <div className={styles.overlayMask}></div>
+                    <div className={styles.overlayText}>
                         <div>
                             <h2>{imageTitle}</h2>
                             <p>
                                 {imageText}
-                                {imageNote && <><br /><span className="small-text">{imageNote}</span></>}
+                                {imageNote && <><br /><span className={styles.smallText}>{imageNote}</span></>}
                             </p>
                         </div>
                     </div>

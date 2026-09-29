@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import Navigation from './Navigation';
-import Footer from './Footer';
+import Navigation from '../Navigation';
+import Footer from '../Footer';
+import styles from './Header.module.scss';
 
 const Header = () => (
-    <div className="header">
-        <div className="header__logo">
-            <NavLink to="/" className="nav__link">
+    <header className={styles.header}>
+        <div className={styles.logo}>
+            <NavLink to="/">
                 <img src="/img/logo.png" alt="Logo" />
             </NavLink>
         </div>
@@ -13,7 +14,7 @@ const Header = () => (
             <Navigation />
             <Footer isInHeader />
         </div>
-    </div>
+    </header>
 );
 
 export default Header;

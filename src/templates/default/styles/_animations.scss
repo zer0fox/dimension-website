@@ -1,44 +1,49 @@
-@keyframes fadeInSlideFromLeft{
-  0%{
-    opacity: 0;
-    transform: translateX(-5rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+// Keyframes as mixins: CSS Modules scope keyframe names per file, so each module includes the ones it uses.
+
+@mixin fade-in-slide-from-left {
+    @keyframes fadeInSlideFromLeft {
+        0% {
+            opacity: 0;
+            transform: translateX(-5rem);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
 }
 
-@keyframes fadeInSlideFromTop{
-  0%{
-    opacity: 0;
-    transform: translateY(-1rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
+@mixin fade-in-slide-from-top {
+    @keyframes fadeInSlideFromTop {
+        0% {
+            opacity: 0;
+            transform: translateY(-1rem);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
 }
 
-@keyframes fadeIn{
-  0%{
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+@mixin fade-in {
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
 }
 
-@keyframes fadeOut{
-  0%{
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes spin {
-   0% { transform: rotate(0deg); }
-   100% { transform: rotate(360deg); }
+@mixin fade-out {
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
 }

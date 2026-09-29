@@ -1,0 +1,13 @@
+@use './styles/mixins' as *;
+
+.content {
+    padding: 122px 5rem 3rem;
+
+    @include media-breakpoint-down(md) {
+        padding: 0 5rem 3rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+        padding: 0 1.5rem;
+    }
+}

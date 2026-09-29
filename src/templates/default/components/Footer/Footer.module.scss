@@ -1,17 +1,26 @@
-.footer {
-    padding-left: 279px;
-}
+@use '../../styles/variables' as *;
 
-@media (max-width: 1200px) {
-    .footer {
+.footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-left: 279px;
+
+    @media (max-width: 1200px) {
         padding-left: 248px;
     }
-}
 
-@media (max-width: 992px) {
-    .footer {
+    @media (max-width: 992px) {
         padding-left: 0;
     }
+}
+
+.text {
+    font-size: $font-size-footer;
+    color: $font-color-link;
+}
+
+.social > a > img {
+    margin: 0 0.8rem 0.8rem;
 }
 
 .contactTitle {

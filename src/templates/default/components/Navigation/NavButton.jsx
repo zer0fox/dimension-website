@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
 const NavButton = ({ text, to, onClick }) => (
-    <NavLink to={to} className="nav__link" onClick={onClick}>{text}</NavLink>
+    <NavLink to={to} onClick={onClick}>{text}</NavLink>
 );
 
 NavButton.propTypes = {

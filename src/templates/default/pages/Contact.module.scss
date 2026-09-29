@@ -1,0 +1,94 @@
+@use '../styles/variables' as *;
+@use '../styles/animations';
+
+@include animations.fade-in;
+@include animations.fade-out;
+
+.alert {
+    display: none;
+
+    &.show {
+        display: block;
+        animation: fadeIn 1s ease;
+    }
+
+    &.hide {
+        animation: fadeOut 1s ease;
+        animation-delay: 7s;
+    }
+}
+
+// Nested under .contact to outrank Bootstrap's .btn / .btn:hover.
+.contact {
+    > div {
+        margin-bottom: 2rem;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    .form {
+        margin-bottom: 2rem;
+    }
+
+    .group {
+        margin-bottom: 1rem;
+    }
+
+    .submit {
+        padding: 0.5rem 6rem;
+        background-color: $color-primary-light;
+        color: $color-white;
+
+        &:hover {
+            background-color: $color-primary-medium;
+        }
+    }
+}
+
+// Kept outside .contact so the submit button's own colour still wins.
+.form input,
+.form textarea {
+    font-family: inherit;
+    color: inherit;
+}
+
+.input {
+    font-size: 1.5rem;
+    padding: 1.5rem 2rem;
+    border-radius: 2px;
+    background-color: rgba($color-white, 0.5);
+    border: none;
+    border-bottom: 3px solid transparent;
+    width: 100%;
+    display: block;
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 1rem 2rem rgba($color-black, 0.1);
+        border-bottom: 3px solid $color-primary-light;
+    }
+
+    &:focus:invalid {
+        border-bottom: 3px solid $color-error;
+    }
+
+    &::placeholder {
+        color: $color-primary-gray;
+    }
+}
+
+.label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-left: 2rem;
+    margin-top: 0.1rem;
+    display: block;
+    transition: all 0.3s;
+}
+
+.input:placeholder-shown + .label {
+    opacity: 0;
+    visibility: hidden;
+}

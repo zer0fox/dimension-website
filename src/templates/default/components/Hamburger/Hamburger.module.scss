@@ -1,0 +1,119 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.background {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    position: fixed;
+    top: 2.5rem;
+    right: 2.5rem;
+    background-image: radial-gradient($color-primary-light, $color-primary-medium);
+    z-index: 999;
+    transition: transform 0.7s cubic-bezier(0.86, 0, 0.07, 1);
+}
+
+.nav {
+    --show-more-max-height: 216px;
+    z-index: 1000;
+    opacity: 0;
+    @include center-box;
+    position: fixed;
+    overflow: hidden;
+    width: 0%;
+    transition: opacity 0.5s cubic-bezier(0.93, -0.08, 0.62, 0.46);
+
+    a {
+        width: 100%;
+        text-align: center;
+        display: block;
+        padding: 1rem 0.3rem;
+        font-size: $font-size-title;
+        color: $font-color-light;
+        transition: color 0.5s ease;
+    }
+
+    a:hover {
+        color: $color-primary-dark;
+    }
+}
+
+.checkbox {
+    display: none;
+}
+
+.checkbox:checked ~ .nav {
+    opacity: 1;
+    width: 100%;
+}
+
+.checkbox:checked ~ .background {
+    transform: scale(80);
+}
+
+// Turns the burger icon into an "X" while the menu is open.
+.checkbox:checked + .button .icon {
+    background-color: transparent;
+}
+
+.checkbox:checked + .button .icon::before {
+    top: 0;
+    transform: rotate(135deg);
+}
+
+.checkbox:checked + .button .icon::after {
+    top: 0;
+    transform: rotate(-135deg);
+}
+
+.button {
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background-color: $background-color-default;
+    z-index: 1001;
+    box-shadow: 0 1rem 3rem rgba($color-black, 0.3);
+    text-align: center;
+    cursor: pointer;
+}
+
+.button:hover .icon::before {
+    top: -1rem;
+}
+
+.button:hover .icon::after {
+    top: 1rem;
+}
+
+.icon {
+    position: relative;
+    margin-top: 3.05rem;
+
+    &,
+    &::before,
+    &::after {
+        width: 3rem;
+        height: 2px;
+        background-color: $color-primary-dark;
+        display: inline-block;
+    }
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        transition: all 0.2s;
+    }
+
+    &::before {
+        top: -0.8rem;
+    }
+
+    &::after {
+        top: 0.8rem;
+    }
+}

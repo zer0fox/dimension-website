@@ -1,5 +1,5 @@
 import { banner } from '@/content/site';
-import styles from './HomeBanner.module.css';
+import styles from './HomeBanner.module.scss';
 
 const HomeBanner = () => (
     <div className={styles.homeBanner}>
