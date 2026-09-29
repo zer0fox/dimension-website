@@ -2,6 +2,17 @@
 
 export const owner = 'Dimitra Gogi';
 
+export const site = {
+    name: 'Dimension Studio',
+    url: 'https://www.dimensionstudio.gr',
+    title: 'Dimension Studio | Architecture & Interior Design in Athens',
+    description: 'Dimension Studio is an architecture and interior design studio in Athens, Greece, founded in 2008 by architect Dimitra Gogi (NTUA). Residential, office and commercial projects.',
+    image: '/img/fb-preview.jpg',
+    city: 'Athens',
+    country: 'GR',
+    founded: '2008',
+};
+
 export const copyright = `${owner} @ 2025`;
 
 export const banner = {
