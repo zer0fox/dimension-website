@@ -1,4 +1,5 @@
--- Initial content. Rows are ordered by sort_order, then by insertion order (id).
+-- Initial collection content, loaded after all migrations on a fresh database.
+-- Rows are ordered by sort_order, then by insertion order (id).
 
 INSERT INTO categories (id, slug, name) VALUES
     (1, 'residential', 'Residential'),
@@ -125,19 +126,17 @@ INSERT INTO project_images (project_id, src, alt, visible) VALUES
     (14, '/img/projects/graphic/commisaria-vilafranca-concept-design.jpg', 'Commisaria vilafranca concept design', 1),
     (15, '/img/projects/graphic/panel-tanatori.png', 'Panel tanatori', 1);
 
-INSERT INTO pages (id, slug, title) VALUES
-    (1, 'home', 'Home');
 
 INSERT INTO page_items (page_id, image, alt, image_title, link, visible) VALUES
-    (1, '/img/projects/commercial/soil2021/_AY51320.jpg', 'Soil Restaurant 1', 'Soil Restaurant', '/projects/commercial/soil', 0),
-    (1, '/img/projects/commercial/soil2021/_AY51318.jpg', 'Soil Restaurant 2', 'Soil Restaurant', '/projects/commercial/soil', 0),
-    (1, '/img/projects/commercial/soil2021/soil1.jpg', 'Soil Restaurant', 'Soil Restaurant', '/projects/commercial/soil', 1),
-    (1, '/img/projects/residential/housingproject2024/house1.jpg', 'Housing Project 1', 'Housing Project', NULL, 1),
-    (1, '/img/home/1.jpg', 'Space is the breath of art. --Frank Lloyd Wright', NULL, NULL, 1),
-    (1, '/img/projects/residential/housingproject2024/house2.jpg', 'Housing Project 2', 'Housing Project', NULL, 1),
-    (1, '/img/projects/residential/paros2020/paros-a1.jpg', 'Paros', 'Four Summer Houses', '/projects/residential/paros', 1),
-    (1, '/img/home/4.jpg', 'Kitchen tiles detail', 'Kitchen Tiles Detail', NULL, 1),
-    (1, '/img/home/5.jpg', '', NULL, NULL, 0),
-    (1, '/img/home/6.jpg', 'Work in progress', 'Work in Progress', NULL, 1),
-    (1, '/img/home/8.jpg', 'Work in progress', 'Work in Progress', NULL, 1),
-    (1, '/img/other/services.png', 'Services', NULL, NULL, 1);
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/projects/commercial/soil2021/_AY51320.jpg', 'Soil Restaurant 1', 'Soil Restaurant', '/projects/commercial/soil', 0),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/projects/commercial/soil2021/_AY51318.jpg', 'Soil Restaurant 2', 'Soil Restaurant', '/projects/commercial/soil', 0),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/projects/commercial/soil2021/soil1.jpg', 'Soil Restaurant', 'Soil Restaurant', '/projects/commercial/soil', 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/projects/residential/housingproject2024/house1.jpg', 'Housing Project 1', 'Housing Project', NULL, 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/home/1.jpg', 'Space is the breath of art. --Frank Lloyd Wright', NULL, NULL, 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/projects/residential/housingproject2024/house2.jpg', 'Housing Project 2', 'Housing Project', NULL, 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/projects/residential/paros2020/paros-a1.jpg', 'Paros', 'Four Summer Houses', '/projects/residential/paros', 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/home/4.jpg', 'Kitchen tiles detail', 'Kitchen Tiles Detail', NULL, 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/home/5.jpg', '', NULL, NULL, 0),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/home/6.jpg', 'Work in progress', 'Work in Progress', NULL, 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/home/8.jpg', 'Work in progress', 'Work in Progress', NULL, 1),
+    ((SELECT id FROM pages WHERE slug = 'home'), '/img/other/services.png', 'Services', NULL, NULL, 1);

@@ -14,7 +14,7 @@ if (command === 'init') {
     console.log(created ? `Created ${DB_PATH}` : `${DB_PATH} already exists (use "reset" to rebuild it)`);
 } else if (command === 'reset') {
     createDatabase({ reset: true });
-    console.log(`Rebuilt ${DB_PATH} from schema.sql and seed.sql`);
+    console.log(`Rebuilt ${DB_PATH} from migrations and seed.sql`);
 } else if (command === 'template') {
     const templates = listTemplates();
     if (!arg) {

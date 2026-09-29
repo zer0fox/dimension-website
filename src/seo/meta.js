@@ -1,5 +1,4 @@
-import { categories, categoryPath, getCategory, getProject, projectPath, projectSubtitle } from '@/data/siteData';
-import { about, contact, owner, site } from '@/content/site';
+import { categories, categoryPath, getCategory, getPage, getProject, projectPath, projectSubtitle, site } from '@/data/siteData';
 
 export const absoluteUrl = (path) => new URL(path, site.url).href;
 
@@ -8,6 +7,11 @@ export const normalizePath = (pathname) => pathname.replace(/\/+$/, '') || '/';
 const truncate = (text, max = 160) =>
     text.length <= max ? text : text.slice(0, text.lastIndexOf(' ', max - 1)) + '…';
 
+export const paragraphsText = (page) =>
+    page.paragraphs.map((paragraph) => [paragraph.lead, paragraph.body].filter(Boolean).join(' ')).join(' ');
+
+const aboutPage = getPage('about');
+
 const studio = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
@@ -15,19 +19,19 @@ const studio = {
     name: site.name,
     url: site.url,
     logo: absoluteUrl('/img/logo.png'),
-    image: absoluteUrl(site.image),
+    ...(site.defaultImage && { image: absoluteUrl(site.defaultImage) }),
     description: site.description,
-    email: contact.email,
-    telephone: contact.phone.replace(/[^\d+]/g, ''),
-    foundingDate: site.founded,
+    ...(site.email && { email: site.email }),
+    ...(site.phone && { telephone: site.phone.replace(/[^\d+]/g, '') }),
+    ...(site.founded && { foundingDate: site.founded }),
     address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: site.country },
     areaServed: 'Greece',
-    sameAs: [contact.instagram],
+    ...(site.instagramUrl && { sameAs: [site.instagramUrl] }),
     founder: {
         '@type': 'Person',
-        name: owner,
-        jobTitle: 'Architect',
-        image: absoluteUrl(about.photo),
+        name: site.ownerName,
+        ...(site.ownerTitle && { jobTitle: site.ownerTitle }),
+        ...(aboutPage?.image && { image: absoluteUrl(aboutPage.image) }),
         alumniOf: [
             { '@type': 'CollegeOrUniversity', name: 'National Technical University of Athens (NTUA)' },
             { '@type': 'EducationalOrganization', name: 'IED Barcelona' },
@@ -35,17 +39,28 @@ const studio = {
     },
 };
 
-const pageMeta = ({ path, title, description, image = site.image, noindex = false, structuredData = [] }) => ({
+const pageMeta = ({ path, title, description, image = site.defaultImage, noindex = false, structuredData = [] }) => ({
     title,
     description: truncate(description),
     url: absoluteUrl(path),
-    image: absoluteUrl(image),
+    image: absoluteUrl(image ?? '/img/logo.png'),
     noindex,
     structuredData: [studio, ...structuredData],
 });
 
-const notFound = (path) => pageMeta({
-    path,
+// Meta for a row in the pages table; NULL meta columns fall back to the given defaults.
+const staticPageMeta = (slug, path, defaults) => {
+    const page = getPage(slug);
+    return pageMeta({
+        path,
+        title: page?.metaTitle ?? defaults.title,
+        description: page?.metaDescription ?? defaults.description,
+        image: page?.image ?? undefined,
+        noindex: defaults.noindex,
+    });
+};
+
+const notFound = (path) => staticPageMeta('not-found', path, {
     title: `Page not found | ${site.name}`,
     description: site.description,
     noindex: true,
@@ -57,21 +72,18 @@ export function getPageMeta(pathname) {
     const [section, categorySlug, projectSlug, ...rest] = path.split('/').filter(Boolean);
 
     if (path === '/') {
-        return pageMeta({ path, title: site.title, description: site.description });
+        return staticPageMeta('home', path, { title: site.name, description: site.description });
     }
     if (path === '/about') {
-        return pageMeta({
-            path,
-            title: `About ${owner}, Architect | ${site.name}`,
-            description: `${about.studio} ${about.intro} ${about.paragraphs.join(' ')}`,
-            image: about.photo,
+        return staticPageMeta('about', path, {
+            title: `About ${site.ownerName} | ${site.name}`,
+            description: aboutPage ? paragraphsText(aboutPage) : site.description,
         });
     }
     if (path === '/contact') {
-        return pageMeta({
-            path,
+        return staticPageMeta('contact', path, {
             title: `Contact | ${site.name}`,
-            description: `Contact ${owner}, architect and interior designer in ${site.city}. Email ${contact.email}, phone ${contact.phone}.`,
+            description: `Contact ${site.ownerName}, architect and interior designer in ${site.city}. Email ${site.email}, phone ${site.phone}.`,
         });
     }
     if (section !== 'projects' || rest.length > 0) return notFound(path);
@@ -99,7 +111,7 @@ export function getPageMeta(pathname) {
         title: `${project.title}${subtitle ? ` (${subtitle})` : ''} | ${site.name}`,
         description: project.description ??
             `${project.title}: ${category.name.toLowerCase()} project${project.location ? ` in ${project.location}` : ''}` +
-            `${project.year ? `, ${project.year}` : ''}, designed by ${owner}, ${site.name}.`,
+            `${project.year ? `, ${project.year}` : ''}, designed by ${site.ownerName}, ${site.name}.`,
         image: project.images[0]?.src,
         structuredData: [{
             '@context': 'https://schema.org',

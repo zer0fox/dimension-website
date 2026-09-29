@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { contact } from '@/content/site';
+import { site } from '@/data/siteData';
 
 export default function useContactForm() {
     const [sent, setSent] = useState(false);
@@ -9,7 +9,7 @@ export default function useContactForm() {
         event.preventDefault();
         if (sent) return;
 
-        const response = await fetch(contact.formEndpoint, {
+        const response = await fetch(site.contactFormEndpoint, {
             method: 'POST',
             body: new FormData(event.target),
         });
@@ -23,5 +23,5 @@ export default function useContactForm() {
         }, 9000);
     };
 
-    return { sent, hiding, handleSubmit, formKey: contact.formKey };
+    return { sent, hiding, handleSubmit, formKey: site.contactFormKey };
 }

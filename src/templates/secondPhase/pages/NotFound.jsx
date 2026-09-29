@@ -1,9 +1,16 @@
 import Content from '../components/Content';
+import usePage from '@/hooks/usePage';
 
-const PageNotFound = () => (
-    <div>
-        <Content title="404" text="Page not found." />
-    </div>
-);
+const NotFound = () => {
+    const page = usePage('not-found');
+    return (
+        <div>
+            <Content
+                title={page.heading ?? undefined}
+                text={page.paragraphs.map((paragraph) => paragraph.body).join(' ')}
+            />
+        </div>
+    );
+};
 
-export default PageNotFound;
+export default NotFound;

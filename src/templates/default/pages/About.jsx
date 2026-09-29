@@ -1,22 +1,28 @@
 import Content from '../components/Content';
-import { about } from '@/content/site';
+import usePage from '@/hooks/usePage';
 import styles from './About.module.scss';
 
-const About = () => (
-    <div>
-        <Content
-            title={about.name}
-            text={
-                <span className={styles.profile}>
-                    <img className={styles.photo} src={about.photo} alt="Profile Pic" />
-                    <strong>{about.studio}</strong> {about.intro}
-                    {about.paragraphs.map((paragraph) => (
-                        <span key={paragraph}><br />{paragraph}</span>
-                    ))}
-                </span>
-            }
-        />
-    </div>
-);
+const About = () => {
+    const page = usePage('about');
+    return (
+        <div>
+            <Content
+                title={page.heading ?? undefined}
+                text={
+                    <span className={styles.profile}>
+                        {page.image && <img className={styles.photo} src={page.image} alt={page.imageAlt ?? ''} />}
+                        {page.paragraphs.map((paragraph, index) => (
+                            <span key={index}>
+                                {index > 0 && <br />}
+                                {paragraph.lead && <><strong>{paragraph.lead}</strong> </>}
+                                {paragraph.body}
+                            </span>
+                        ))}
+                    </span>
+                }
+            />
+        </div>
+    );
+};
 
 export default About;

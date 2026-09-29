@@ -1,6 +1,5 @@
-import { categories, categoryPath, projectPath, projectSubtitle } from '@/data/siteData';
-import { about, contact, owner, site } from '@/content/site';
-import { absoluteUrl } from './meta';
+import { categories, categoryPath, getPage, projectPath, projectSubtitle, site } from '@/data/siteData';
+import { absoluteUrl, paragraphsText } from './meta';
 
 const escapeHtml = (value) => String(value)
     .replace(/&/g, '&amp;')
@@ -41,20 +40,20 @@ export function llmsTxt() {
         '',
         `> ${site.description}`,
         '',
-        `${about.studio} ${about.intro} ${about.paragraphs.join(' ')}`,
+        paragraphsText(getPage('about') ?? { paragraphs: [] }),
         '',
         '## Contact',
         '',
-        `- Architect: ${owner}`,
-        `- Email: ${contact.email}`,
-        `- Phone: ${contact.phone}`,
-        `- Instagram: ${contact.instagram}`,
-        `- Location: ${site.city}, Greece`,
+        `- ${site.ownerTitle ?? 'Owner'}: ${site.ownerName}`,
+        site.email && `- Email: ${site.email}`,
+        site.phone && `- Phone: ${site.phone}`,
+        site.instagramUrl && `- Instagram: ${site.instagramUrl}`,
+        site.city && `- Location: ${site.city}, Greece`,
         '',
         '## Pages',
         '',
         `- [Home](${absoluteUrl('/')})`,
-        `- [About ${owner}](${absoluteUrl('/about')})`,
+        `- [About ${site.ownerName}](${absoluteUrl('/about')})`,
         `- [Contact](${absoluteUrl('/contact')})`,
     ];
 
@@ -67,5 +66,5 @@ export function llmsTxt() {
             lines.push(`- [${project.title}](${link})${details ? `: ${details}` : ''}`);
         }
     }
-    return lines.join('\n') + '\n';
+    return lines.filter((line) => line !== null && line !== undefined && line !== false).join('\n') + '\n';
 }

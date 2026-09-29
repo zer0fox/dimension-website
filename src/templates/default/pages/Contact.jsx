@@ -1,9 +1,10 @@
-import { contact } from '@/content/site';
+import useSite from '@/hooks/useSite';
 import useContactForm from '@/hooks/useContactForm';
 import contentStyles from '../components/Content/Content.module.scss';
 import styles from './Contact.module.scss';
 
 const Contact = () => {
+    const site = useSite();
     const { sent, hiding, handleSubmit, formKey } = useContactForm();
     const alertClass = ['alert', 'alert-success', styles.alert, sent && styles.show, hiding && styles.hide]
         .filter(Boolean)
@@ -18,8 +19,8 @@ const Contact = () => {
                 <div className={`${contentStyles.text} ${styles.contact}`}>
                     <div>
                         <h2>Information</h2>
-                        {contact.phone}<br />
-                        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                        {site.phone}<br />
+                        <a href={`mailto:${site.email}`}>{site.email}</a>
                     </div>
                     <div>
                         <h2>Contact me</h2>

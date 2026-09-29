@@ -1,7 +1,8 @@
-import { contact } from '@/content/site';
+import useSite from '@/hooks/useSite';
 import useContactForm from '@/hooks/useContactForm';
 
 const Contact = () => {
+    const site = useSite();
     const { sent, hiding, handleSubmit, formKey } = useContactForm();
 
     return (
@@ -13,8 +14,8 @@ const Contact = () => {
                 <div className="content__text contact">
                     <div>
                         <h2>Information</h2>
-                        {contact.phone}<br />
-                        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                        {site.phone}<br />
+                        <a href={`mailto:${site.email}`}>{site.email}</a>
                     </div>
                     <div>
                         <h2>Contact me</h2>
