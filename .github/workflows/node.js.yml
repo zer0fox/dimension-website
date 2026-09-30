@@ -38,6 +38,7 @@ jobs:
           # '/dimension-website/' for https://zer0fox.github.io/dimension-website/
           # '/' once the site is served from https://www.dimensionstudio.gr/
           BASE_PATH: /dimension-website/
+          VITE_FORMSPREE_ID: ${{ vars.FORMSPREE_ID }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

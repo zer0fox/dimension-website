@@ -38,8 +38,8 @@ INSERT INTO site (
     'dimitra.gogi@gmail.com',
     '(+30) 697 7070 170',
     'https://www.instagram.com/dim_ension/',
-    '/post.php',
-    'JHNHReLVWpq6LeVYRp3m'
+    NULL,
+    NULL
 );
 
 -- meta_title / meta_description fall back to generated values when NULL.

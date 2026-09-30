@@ -157,8 +157,6 @@ export function readSiteData() {
                     email: localizedSite.email,
                     phone: localizedSite.phone,
                     instagramUrl: localizedSite.instagram_url,
-                    contactFormEndpoint: localizedSite.contact_form_endpoint,
-                    contactFormKey: localizedSite.contact_form_key,
                 },
                 categories: localizedCategories.map((category) => ({
                     slug: category.slug,

@@ -7,16 +7,16 @@ import styles from './Contact.module.scss';
 const Contact = () => {
     const site = useSite();
     const { text } = useLanguage();
-    const { sent, hiding, handleSubmit, formKey } = useContactForm();
-    const alertClass = ['alert', 'alert-success', styles.alert, sent && styles.show, hiding && styles.hide]
-        .filter(Boolean)
-        .join(' ');
+    const { endpoint, formRef, returned, dismiss, onSubmit } = useContactForm();
 
     return (
         <div>
-            <div className={alertClass} role="alert">
-                <strong>{text('Το μήνυμά σας στάλθηκε επιτυχώς.', 'Your message has been sent successfully.')}</strong> {text('Ευχαριστώ για την επικοινωνία. Θα σας απαντήσω το συντομότερο δυνατό.', 'Thank you for contacting me, I will get back to you as soon as possible.')}
-            </div>
+            {returned && (
+                <div className={styles.notification} role="status">
+                    <span><strong>{text('Το μήνυμά σας στάλθηκε επιτυχώς.', 'Your message has been sent successfully.')}</strong> {text('Ευχαριστώ για την επικοινωνία. Θα σας απαντήσω το συντομότερο δυνατό.', 'Thank you for contacting me, I will get back to you as soon as possible.')}</span>
+                    <button type="button" className={styles.dismiss} onClick={dismiss} aria-label={text('Κλείσιμο ειδοποίησης', 'Dismiss notification')} title={text('Κλείσιμο ειδοποίησης', 'Dismiss notification')}>&times;</button>
+                </div>
+            )}
             <div className={contentStyles.item}>
                 <div className={`${contentStyles.text} ${styles.contact}`}>
                     <div>
@@ -26,22 +26,28 @@ const Contact = () => {
                     </div>
                     <div>
                         <h2>{text('Επικοινωνήστε μαζί μου', 'Contact me')}</h2>
-                        <form onSubmit={handleSubmit} className={styles.form}>
-                            <div className={styles.group}>
-                                <input type="text" className={styles.input} placeholder={text('Ονοματεπώνυμο', 'Full Name')} id="form-name" name="name" required />
-                                <label htmlFor="form-name" className={styles.label}>{text('Ονοματεπώνυμο', 'Full name')}</label>
-                            </div>
-                            <div className={styles.group}>
-                                <input type="email" className={styles.input} placeholder={text('Διεύθυνση email', 'Email address')} id="form-email" name="email" required />
-                                <label htmlFor="form-email" className={styles.label}>{text('Διεύθυνση email', 'Email address')}</label>
-                            </div>
-                            <div className={styles.group}>
-                                <textarea className={styles.input} placeholder={text('Το μήνυμά σας', 'Your message')} id="form-message" name="message"></textarea>
-                                <label htmlFor="form-message" className={styles.label}>{text('Το μήνυμά σας', 'Your message')}</label>
-                            </div>
-                            <input type="hidden" id="form-key" name="formkey" value={formKey} />
-                            <input type="submit" className={`btn btn-lg ${styles.submit}`} value={text('Αποστολή', 'Send')} />
-                        </form>
+                        {endpoint ? (
+                            <form ref={formRef} action={endpoint} method="POST" onSubmit={onSubmit} className={styles.form}>
+                                <div className={styles.group}>
+                                    <input type="text" className={styles.input} placeholder={text('Ονοματεπώνυμο', 'Full Name')} id="form-name" name="name" required />
+                                    <label htmlFor="form-name" className={styles.label}>{text('Ονοματεπώνυμο', 'Full name')}</label>
+                                </div>
+                                <div className={styles.group}>
+                                    <input type="email" className={styles.input} placeholder={text('Διεύθυνση email', 'Email address')} id="form-email" name="email" required />
+                                    <label htmlFor="form-email" className={styles.label}>{text('Διεύθυνση email', 'Email address')}</label>
+                                </div>
+                                <div className={styles.group}>
+                                    <textarea className={styles.input} placeholder={text('Το μήνυμά σας', 'Your message')} id="form-message" name="message" required></textarea>
+                                    <label htmlFor="form-message" className={styles.label}>{text('Το μήνυμά σας', 'Your message')}</label>
+                                </div>
+                                <div className={styles.honeypot} aria-hidden="true">
+                                    <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" />
+                                </div>
+                                <input type="submit" className={`btn btn-lg ${styles.submit}`} value={text('Αποστολή', 'Send')} />
+                            </form>
+                        ) : (
+                            <p role="status">{text('Η φόρμα επικοινωνίας δεν είναι διαθέσιμη προς το παρόν. Στείλτε μου email.', 'The contact form is temporarily unavailable. Please email me instead.')}</p>
+                        )}
                     </div>
                 </div>
             </div>

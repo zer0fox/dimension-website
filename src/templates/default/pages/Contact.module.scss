@@ -1,22 +1,4 @@
 @use '../styles/variables' as *;
-@use '../styles/animations';
-
-@include animations.fade-in;
-@include animations.fade-out;
-
-.alert {
-    display: none;
-
-    &.show {
-        display: block;
-        animation: fadeIn 1s ease;
-    }
-
-    &.hide {
-        animation: fadeOut 1s ease;
-        animation-delay: 7s;
-    }
-}
 
 // Nested under .contact to outrank Bootstrap's .btn / .btn:hover.
 .contact {
@@ -91,4 +73,53 @@
 .input:placeholder-shown + .label {
     opacity: 0;
     visibility: hidden;
+}
+
+.honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+.notification {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1100;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: min(38rem, calc(100vw - 4rem));
+    padding: 1.5rem;
+    border-left: 4px solid $color-primary-light;
+    border-radius: 4px;
+    background: $color-white;
+    box-shadow: 0 0.5rem 2rem rgba($color-black, 0.15);
+    color: $font-color;
+    font-size: 1.4rem;
+    line-height: 1.5;
+
+    @media (max-width: 991px) {
+        top: 9rem;
+        right: 1.5rem;
+        width: min(38rem, calc(100vw - 3rem));
+    }
+}
+
+.dismiss {
+    flex: none;
+    padding: 0 0.2rem;
+    border: 0;
+    background: none;
+    color: $color-primary-dark;
+    font-size: 2.2rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid $color-primary-light;
+        outline-offset: 2px;
+    }
 }

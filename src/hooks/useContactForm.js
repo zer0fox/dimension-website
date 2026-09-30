@@ -1,27 +1,38 @@
-import { useState } from 'react';
-import { site } from '@/data/siteData';
+import { useEffect, useRef, useState } from 'react';
+
+const formId = import.meta.env.VITE_FORMSPREE_ID || 'xaenvvkp';
+const pendingKey = 'dimension-contact-pending';
 
 export default function useContactForm() {
-    const [sent, setSent] = useState(false);
-    const [hiding, setHiding] = useState(false);
+    const formRef = useRef(null);
+    const [returned, setReturned] = useState(false);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (sent) return;
+    useEffect(() => {
+        const finishReturn = () => {
+            if (sessionStorage.getItem(pendingKey) !== '1') return;
+            sessionStorage.removeItem(pendingKey);
+            formRef.current?.reset();
+            setReturned(true);
+        };
+        const onPageShow = (event) => {
+            if (event.persisted) finishReturn();
+        };
 
-        const response = await fetch(site.contactFormEndpoint, {
-            method: 'POST',
-            body: new FormData(event.target),
-        });
-        if (!response.ok) return;
+        window.addEventListener('pageshow', onPageShow);
+        if (performance.getEntriesByType('navigation')[0]?.type === 'back_forward') finishReturn();
+        return () => window.removeEventListener('pageshow', onPageShow);
+    }, []);
 
-        setSent(true);
-        setTimeout(() => setHiding(true), 1000);
-        setTimeout(() => {
-            setSent(false);
-            setHiding(false);
-        }, 9000);
+    const onSubmit = () => {
+        sessionStorage.setItem(pendingKey, '1');
+        setReturned(false);
     };
 
-    return { sent, hiding, handleSubmit, formKey: site.contactFormKey };
+    return {
+        endpoint: /^[a-zA-Z0-9]+$/.test(formId) ? `https://formspree.io/f/${formId}` : null,
+        formRef,
+        returned,
+        dismiss: () => setReturned(false),
+        onSubmit,
+    };
 }
