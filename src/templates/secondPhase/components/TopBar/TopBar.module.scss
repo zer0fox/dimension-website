@@ -112,3 +112,11 @@
         color: $color-primary-light;
     }
 }
+
+.language {
+    margin-left: auto;
+    padding-left: 2rem;
+    @media (max-width: 991px) {
+        margin-right: 7rem;
+    }
+}

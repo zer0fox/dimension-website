@@ -8,6 +8,7 @@ export default function usePageMeta() {
 
     useEffect(() => {
         const meta = getPageMeta(pathname);
+        document.documentElement.lang = meta.language;
         document.title = meta.title;
         document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
         document.querySelector('link[rel="canonical"]')?.setAttribute('href', meta.url);

@@ -45,7 +45,6 @@ function migrate(db) {
         }
         version = migration.version;
     }
-    db.exec(`PRAGMA user_version = ${version}`);
 }
 
 // Creates the database (migrations + seed) or brings an existing one up to date.
@@ -109,7 +108,7 @@ export function readSiteData() {
         `).all();
 
         const images = db.prepare(`
-            SELECT project_id, src, alt FROM project_images
+            SELECT id, project_id, src, alt FROM project_images
             WHERE visible = 1
             ORDER BY sort_order, id
         `).all();
@@ -120,75 +119,89 @@ export function readSiteData() {
         `).all();
 
         const paragraphs = db.prepare(`
-            SELECT page_id, lead, body FROM page_paragraphs
+            SELECT id, page_id, lead, body FROM page_paragraphs
             WHERE visible = 1
             ORDER BY sort_order, id
         `).all();
 
         const pageItems = db.prepare(`
-            SELECT page_id, image, alt, image_title, link FROM page_items
+            SELECT id, page_id, image, alt, image_title, link FROM page_items
             WHERE visible = 1
             ORDER BY sort_order, id
         `).all();
 
-        return {
-            site: {
-                name: site.name,
-                url: site.url,
-                description: site.description,
-                defaultImage: site.default_image,
-                ownerName: site.owner_name,
-                ownerTitle: site.owner_title,
-                copyright: site.copyright,
-                city: site.city,
-                country: site.country,
-                founded: site.founded,
-                email: site.email,
-                phone: site.phone,
-                instagramUrl: site.instagram_url,
-                contactFormEndpoint: site.contact_form_endpoint,
-                contactFormKey: site.contact_form_key,
-            },
-            categories: categories.map((category) => ({
-                slug: category.slug,
-                name: category.name,
-                projects: projects
-                    .filter((project) => project.category_id === category.id)
-                    .map((project) => ({
-                        slug: project.slug,
-                        title: project.title,
-                        year: project.year,
-                        location: project.location,
-                        credit: project.credit,
-                        description: project.description,
-                        hasPage: project.has_page === 1,
-                        listed: project.listed === 1,
-                        images: images
-                            .filter((image) => image.project_id === project.id)
-                            .map(({ src, alt }) => ({ src, alt })),
-                    })),
-            })),
-            pages: Object.fromEntries(pages.map((page) => [page.slug, {
-                slug: page.slug,
-                title: page.title,
-                heading: page.heading,
-                subheading: page.subheading,
-                image: page.image,
-                imageAlt: page.image_alt,
-                metaTitle: page.meta_title,
-                metaDescription: page.meta_description,
-                paragraphs: paragraphs
-                    .filter((paragraph) => paragraph.page_id === page.id)
-                    .map(({ lead, body }) => ({ lead, body })),
-                items: pageItems
-                    .filter((item) => item.page_id === page.id)
-                    .map((item) => ({
-                        image: item.image,
-                        alt: item.alt,
-                        imageTitle: item.image_title,
-                        link: item.link,
-                    })),
-            }])),
+        const translations = new Map(db.prepare('SELECT entity, entity_id, field, language, value FROM translations')
+            .all().map(({ entity, entity_id, field, language, value }) => [`${entity}:${entity_id}:${field}:${language}`, value]));
+        const localize = (entity, row, language) => Object.fromEntries(Object.entries(row).map(([field, value]) =>
+            [field, translations.get(`${entity}:${row.id}:${field}:${language}`) ?? value]));
+        const build = (language) => {
+            const localizedSite = localize('site', site, language);
+            const localizedCategories = categories.map((row) => localize('categories', row, language));
+            const localizedProjects = projects.map((row) => localize('projects', row, language));
+            const localizedImages = images.map((row) => localize('project_images', row, language));
+            const localizedPages = pages.map((row) => localize('pages', row, language));
+            const localizedParagraphs = paragraphs.map((row) => localize('page_paragraphs', row, language));
+            const localizedItems = pageItems.map((row) => localize('page_items', row, language));
+            return {
+                site: {
+                    name: localizedSite.name,
+                    url: localizedSite.url,
+                    description: localizedSite.description,
+                    defaultImage: localizedSite.default_image,
+                    ownerName: localizedSite.owner_name,
+                    ownerTitle: localizedSite.owner_title,
+                    copyright: localizedSite.copyright,
+                    city: localizedSite.city,
+                    country: localizedSite.country,
+                    founded: localizedSite.founded,
+                    email: localizedSite.email,
+                    phone: localizedSite.phone,
+                    instagramUrl: localizedSite.instagram_url,
+                    contactFormEndpoint: localizedSite.contact_form_endpoint,
+                    contactFormKey: localizedSite.contact_form_key,
+                },
+                categories: localizedCategories.map((category) => ({
+                    slug: category.slug,
+                    name: category.name,
+                    projects: localizedProjects
+                        .filter((project) => project.category_id === category.id)
+                        .map((project) => ({
+                            slug: project.slug,
+                            title: project.title,
+                            year: project.year,
+                            location: project.location,
+                            credit: project.credit,
+                            description: project.description,
+                            hasPage: project.has_page === 1,
+                            listed: project.listed === 1,
+                            images: localizedImages
+                                .filter((image) => image.project_id === project.id)
+                                .map(({ src, alt }) => ({ src, alt })),
+                        })),
+                })),
+                pages: Object.fromEntries(localizedPages.map((page) => [page.slug, {
+                    slug: page.slug,
+                    title: page.title,
+                    heading: page.heading,
+                    subheading: page.subheading,
+                    image: page.image,
+                    imageAlt: page.image_alt,
+                    metaTitle: page.meta_title,
+                    metaDescription: page.meta_description,
+                    paragraphs: localizedParagraphs
+                        .filter((paragraph) => paragraph.page_id === page.id)
+                        .map(({ lead, body }) => ({ lead, body })),
+                    items: localizedItems
+                        .filter((item) => item.page_id === page.id)
+                        .map((item) => ({
+                            image: item.image,
+                            alt: item.alt,
+                            imageTitle: item.image_title,
+                            link: item.link,
+                        })),
+                }])),
+            };
         };
+        return { en: build('en'), el: build('el') };
     });
 }

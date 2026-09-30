@@ -1,0 +1,27 @@
+.switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: inherit;
+    font-size: 1.5rem;
+    letter-spacing: 0;
+
+    a {
+        color: inherit;
+        text-decoration: none;
+        opacity: 0.65;
+        padding: 0.4rem 0;
+
+        &[aria-current="true"],
+        &:hover,
+        &:focus-visible {
+            opacity: 1;
+        }
+
+        &[aria-current="true"] {
+            font-weight: bold;
+            text-decoration: underline;
+            text-underline-offset: 0.3rem;
+        }
+    }
+}

@@ -11,3 +11,12 @@
         padding: 0 1.5rem;
     }
 }
+.homeLanguage {
+    position: absolute;
+    top: 2.5rem;
+    right: 2.5rem;
+    z-index: 10;
+    @media (max-width: 991px) {
+        right: 10rem;
+    }
+}

@@ -20,6 +20,7 @@ if (!SEO_BLOCK.test(template) || !template.includes(ROOT)) {
 const renderBody = (url) => render(url).replace(/<link rel="preload" as="image"[^>]*\/>/g, '');
 
 const renderPage = (url) => template
+    .replace('<html lang="el">', () => `<html lang="${getPageMeta(url).language}">`)
     .replace(SEO_BLOCK, () => headHtml(getPageMeta(url)))
     .replace(ROOT, () => `<div id="root" data-path="${url}">${renderBody(url)}</div>`);
 

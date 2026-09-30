@@ -7,7 +7,7 @@ import TopBar from './components/TopBar';
 import styles from './Layout.module.scss';
 
 const Layout = () => {
-    const isHome = useLocation().pathname === '/';
+    const isHome = ['/', '/en'].includes(useLocation().pathname);
     const [heroPassed, setHeroPassed] = useState(false);
 
     useEffect(() => {

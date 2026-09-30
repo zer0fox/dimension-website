@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HomeHero.module.scss';
 import { asset } from '@/data/siteData';
+import useLanguage from '@/hooks/useLanguage';
 
 const SLIDE_DURATION = 6000;
 
 // Full-screen intro that stays pinned while the next section scrolls over it.
 const HomeHero = ({ title, subtitle, logoAlt, slides, targetId }) => {
+    const { text } = useLanguage();
     const heroRef = useRef(null);
     const [active, setActive] = useState(0);
 
@@ -59,7 +61,7 @@ const HomeHero = ({ title, subtitle, logoAlt, slides, targetId }) => {
                 {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
             </div>
             <button type="button" className={styles.scroll} onClick={scrollDown}>
-                <span>Scroll</span>
+                <span>{text('Κύλιση', 'Scroll')}</span>
             </button>
         </section>
     );

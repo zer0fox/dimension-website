@@ -12,6 +12,8 @@ export function headHtml(meta) {
         `<title>${escapeHtml(meta.title)}</title>`,
         `<meta name="description" content="${escapeHtml(meta.description)}" />`,
         `<link rel="canonical" href="${escapeHtml(meta.url)}" />`,
+        `<link rel="alternate" hreflang="${meta.language}" href="${escapeHtml(meta.url)}" />`,
+        `<link rel="alternate" hreflang="${meta.language === 'el' ? 'en' : 'el'}" href="${escapeHtml(meta.alternate)}" />`,
         meta.noindex && '<meta name="robots" content="noindex" />',
         '<meta property="og:type" content="website" />',
         `<meta property="og:site_name" content="${escapeHtml(site.name)}" />`,

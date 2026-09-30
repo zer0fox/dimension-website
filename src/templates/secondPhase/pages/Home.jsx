@@ -3,6 +3,7 @@ import Gallery from '../components/Gallery';
 import usePage from '@/hooks/usePage';
 import useSite from '@/hooks/useSite';
 import useHomeGallery from '@/hooks/useHomeGallery';
+import useLanguage from '@/hooks/useLanguage';
 
 const GALLERY_ID = 'work';
 
@@ -10,6 +11,7 @@ const Home = () => {
     const page = usePage('home');
     const site = useSite();
     const gallery = useHomeGallery();
+    const { text } = useLanguage();
 
     return (
         <div>
@@ -22,7 +24,7 @@ const Home = () => {
             />
             <Gallery
                 id={GALLERY_ID}
-                title="Projects & Journal"
+                title={text('Έργα & Ημερολόγιο', 'Projects & Journal')}
                 filters={gallery.filters}
                 active={gallery.active}
                 onFilter={gallery.setActive}

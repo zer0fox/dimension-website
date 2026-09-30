@@ -1,4 +1,4 @@
-import { categories, categoryPath, getCategory, getPage, getProject, projectPath, projectSubtitle, site, unprefixAsset } from '@/data/siteData';
+import { categories, categoryPath, getCategory, getPage, getProject, getSite, languageFromPath, localizedPath, projectPath, projectSubtitle, site, unprefixAsset } from '@/data/siteData';
 
 export const absoluteUrl = (path) => new URL(unprefixAsset(path), site.url).href;
 
@@ -10,9 +10,10 @@ const truncate = (text, max = 160) =>
 export const paragraphsText = (page) =>
     page.paragraphs.map((paragraph) => [paragraph.lead, paragraph.body].filter(Boolean).join(' ')).join(' ');
 
-const aboutPage = getPage('about');
-
-const studio = {
+const studioFor = (language) => {
+const site = getSite(language);
+const aboutPage = getPage('about', language);
+return {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
     '@id': `${site.url}/#studio`,
@@ -38,21 +39,25 @@ const studio = {
         ],
     },
 };
+};
 
-const pageMeta = ({ path, title, description, image = site.defaultImage, noindex = false, structuredData = [] }) => ({
+const pageMeta = ({ path, title, description, image = site.defaultImage, noindex = false, structuredData = [], language = 'el' }) => ({
+    language,
+    alternate: absoluteUrl(language === 'en' ? path.replace(/^\/en(?=\/|$)/, '') || '/' : localizedPath(path, 'en')),
     title,
     description: truncate(description),
     url: absoluteUrl(path),
     image: absoluteUrl(image ?? '/img/logo.png'),
     noindex,
-    structuredData: [studio, ...structuredData],
+    structuredData: [studioFor(language), ...structuredData],
 });
 
 // Meta for a row in the pages table; NULL meta columns fall back to the given defaults.
-const staticPageMeta = (slug, path, defaults) => {
-    const page = getPage(slug);
+const staticPageMeta = (slug, path, defaults, language) => {
+    const page = getPage(slug, language);
     return pageMeta({
         path,
+        language,
         title: page?.metaTitle ?? defaults.title,
         description: page?.metaDescription ?? defaults.description,
         image: page?.image ?? undefined,
@@ -60,58 +65,68 @@ const staticPageMeta = (slug, path, defaults) => {
     });
 };
 
-const notFound = (path) => staticPageMeta('not-found', path, {
+const notFound = (path, language) => staticPageMeta('not-found', path, {
     title: `Page not found | ${site.name}`,
     description: site.description,
     noindex: true,
-});
+}, language);
 
 // Metadata for any URL; used for prerendered <head> tags and client-side title updates.
 export function getPageMeta(pathname) {
     const path = normalizePath(pathname);
-    const [section, categorySlug, projectSlug, ...rest] = path.split('/').filter(Boolean);
+    const language = languageFromPath(path);
+    const localSite = getSite(language);
+    const routePath = language === 'en' ? path.replace(/^\/en(?=\/|$)/, '') || '/' : path;
+    const [section, categorySlug, projectSlug, ...rest] = routePath.split('/').filter(Boolean);
 
-    if (path === '/') {
-        return staticPageMeta('home', path, { title: site.name, description: site.description });
+    if (routePath === '/') {
+        return staticPageMeta('home', path, { title: localSite.name, description: localSite.description }, language);
     }
-    if (path === '/about') {
+    if (routePath === '/about') {
         return staticPageMeta('about', path, {
-            title: `About ${site.ownerName} | ${site.name}`,
-            description: aboutPage ? paragraphsText(aboutPage) : site.description,
-        });
+            title: `${language === 'el' ? 'Σχετικά με' : 'About'} ${localSite.ownerName} | ${localSite.name}`,
+            description: paragraphsText(getPage('about', language)),
+        }, language);
     }
-    if (path === '/contact') {
+    if (routePath === '/contact') {
         return staticPageMeta('contact', path, {
-            title: `Contact | ${site.name}`,
-            description: `Contact ${site.ownerName}, architect and interior designer in ${site.city}. Email ${site.email}, phone ${site.phone}.`,
-        });
+            title: `${language === 'el' ? 'Επικοινωνία' : 'Contact'} | ${localSite.name}`,
+            description: language === 'el'
+                ? `Επικοινωνήστε με τη ${localSite.ownerName} στην ${localSite.city}. Email ${localSite.email}, τηλέφωνο ${localSite.phone}.`
+                : `Contact ${localSite.ownerName}, architect and interior designer in ${localSite.city}. Email ${localSite.email}, phone ${localSite.phone}.`,
+        }, language);
     }
-    if (section !== 'projects' || rest.length > 0) return notFound(path);
+    if (section !== 'projects' || rest.length > 0) return notFound(path, language);
 
-    const category = getCategory(categorySlug);
-    if (!category) return notFound(path);
+    const category = getCategory(categorySlug, language);
+    if (!category) return notFound(path, language);
 
     if (!projectSlug) {
         const titles = category.projects.filter((p) => p.listed && p.title).map((p) => p.title);
         return pageMeta({
             path,
-            title: `${category.name} Projects | ${site.name}`,
-            description: `${category.name} architecture and interior design projects by ${site.name}, ${site.city}` +
-                (titles.length ? `: ${titles.join(', ')}.` : '.'),
-            image: category.projects.find((p) => p.images.length)?.images[0].src,
+            language,
+            title: `${category.name} ${language === 'el' ? 'έργα' : 'Projects'} | ${localSite.name}`,
+            description: language === 'el'
+                ? `Έργα ${category.name} του ${localSite.name}, ${localSite.city}.`
+                : `${category.name} architecture and interior design projects by ${localSite.name}, ${localSite.city}` +
+                    (titles.length ? `: ${titles.join(', ')}.` : '.'),
+            image: category.projects.find((project) => project.images.length)?.images[0].src,
         });
     }
 
-    const project = getProject(categorySlug, projectSlug);
-    if (!project) return notFound(path);
+    const project = getProject(categorySlug, projectSlug, language);
+    if (!project) return notFound(path, language);
 
     const subtitle = projectSubtitle(project);
     return pageMeta({
         path,
+        language,
         title: `${project.title}${subtitle ? ` (${subtitle})` : ''} | ${site.name}`,
-        description: project.description ??
-            `${project.title}: ${category.name.toLowerCase()} project${project.location ? ` in ${project.location}` : ''}` +
-            `${project.year ? `, ${project.year}` : ''}, designed by ${site.ownerName}, ${site.name}.`,
+        description: project.description ?? (language === 'el'
+            ? `${project.title}: έργο ${category.name.toLowerCase()}${project.location ? ` στην περιοχή ${project.location}` : ''}${project.year ? `, ${project.year}` : ''} από το ${localSite.name}.`
+            : `${project.title}: ${category.name.toLowerCase()} project${project.location ? ` in ${project.location}` : ''}` +
+                `${project.year ? `, ${project.year}` : ''}, designed by ${localSite.ownerName}, ${localSite.name}.`),
         image: project.images[0]?.src,
         structuredData: [{
             '@context': 'https://schema.org',
@@ -123,14 +138,14 @@ export function getPageMeta(pathname) {
             ...(project.year && { dateCreated: String(project.year) }),
             ...(project.location && { locationCreated: { '@type': 'Place', name: project.location } }),
             image: project.images.map((image) => absoluteUrl(image.src)),
-            creator: { '@id': studio['@id'] },
+            creator: { '@id': studioFor(language)['@id'] },
         }],
     });
 }
 
 // Every URL that has its own page; unlisted projects are prerendered but kept out of the sitemap.
 export function getRoutes() {
-    return [
+    const routes = [
         { path: '/', inSitemap: true },
         { path: '/about', inSitemap: true },
         { path: '/contact', inSitemap: true },
@@ -141,4 +156,5 @@ export function getRoutes() {
                 .map((project) => ({ path: projectPath(category, project), inSitemap: project.listed })),
         ]),
     ];
+    return routes.flatMap((route) => [route, { ...route, path: localizedPath(route.path, 'en') }]);
 }

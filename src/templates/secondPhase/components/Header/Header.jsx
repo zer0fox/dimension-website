@@ -3,19 +3,23 @@ import Navigation from '../Navigation';
 import Footer from '../Footer';
 import styles from './Header.module.scss';
 import { asset } from '@/data/siteData';
+import useLanguage from '@/hooks/useLanguage';
 
-const Header = () => (
-    <header className={styles.header}>
-        <div className={styles.logo}>
-            <NavLink to="/">
-                <img src={asset('/img/logo.png')} alt="Logo" />
-            </NavLink>
-        </div>
-        <div className="d-none d-sm-none d-md-none d-lg-block">
-            <Navigation />
-            <Footer isInHeader />
-        </div>
-    </header>
-);
+const Header = () => {
+    const { path } = useLanguage();
+    return (
+        <header className={styles.header}>
+            <div className={styles.logo}>
+                <NavLink to={path('/')}>
+                    <img src={asset('/img/logo.png')} alt="Logo" />
+                </NavLink>
+            </div>
+            <div className="d-none d-sm-none d-md-none d-lg-block">
+                <Navigation />
+                <Footer isInHeader />
+            </div>
+        </header>
+    );
+};
 
 export default Header;

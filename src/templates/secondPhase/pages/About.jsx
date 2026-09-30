@@ -6,7 +6,6 @@ const About = () => {
 	const page = usePage('about');
 	return (
 		<div>
-			PHASE TWO TEMPLATE
 			<Content
 				title={page.heading ?? undefined}
 				text={

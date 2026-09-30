@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { categories, categoryPath } from '@/data/siteData';
-
-const menuItems = categories.map((category) => ({
-    slug: category.slug,
-    name: category.name,
-    to: categoryPath(category),
-}));
+import { getCategories, categoryPath } from '@/data/siteData';
+import useLanguage from './useLanguage';
 
 export default function useProjectsMenu() {
     const [open, setOpen] = useState(false);
+    const { language, path } = useLanguage();
+    const menuItems = getCategories(language).map((category) => ({
+        slug: category.slug, name: category.name, to: path(categoryPath(category)),
+    }));
 
     const toggle = (event) => {
         event.preventDefault();

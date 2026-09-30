@@ -1,5 +1,7 @@
-import { site } from '@/data/siteData';
+import { getSite } from '@/data/siteData';
+import useLanguage from './useLanguage';
 
 export default function useSite() {
-    return site;
+    const { language } = useLanguage();
+    return getSite(language);
 }
