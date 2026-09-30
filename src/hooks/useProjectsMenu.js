@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getCategories, categoryPath } from '@/data/siteData';
 import useLanguage from './useLanguage';
 
 export default function useProjectsMenu() {
-    const [open, setOpen] = useState(false);
+    const { pathname } = useLocation();
     const { language, path } = useLanguage();
+    const projectsPath = path('/projects');
+    const isProjectsPath = pathname === projectsPath || pathname.startsWith(projectsPath + '/');
+    const [open, setOpen] = useState(isProjectsPath);
+
+    useEffect(() => {
+        setOpen(isProjectsPath);
+    }, [pathname, isProjectsPath]);
     const menuItems = getCategories(language).map((category) => ({
         slug: category.slug, name: category.name, to: path(categoryPath(category)),
     }));
