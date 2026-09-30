@@ -49,6 +49,10 @@
     cursor: pointer;
     transition: color 0.3s ease;
 
+    &:focus {
+        outline: none;
+    }
+
     &::after {
         content: '';
         position: absolute;
@@ -62,11 +66,13 @@
     }
 
     &:hover,
+    &:focus-visible,
     &.selected {
         color: $color-primary-light;
     }
 
-    &.selected::after {
+    &.selected::after,
+    &:focus-visible::after {
         transform: scaleX(1);
     }
 }
