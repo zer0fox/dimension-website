@@ -18,10 +18,5 @@
             opacity: 1;
         }
 
-        &[aria-current="true"] {
-            font-weight: bold;
-            text-decoration: underline;
-            text-underline-offset: 0.3rem;
-        }
     }
 }

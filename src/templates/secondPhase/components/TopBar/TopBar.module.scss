@@ -69,17 +69,23 @@
 }
 
 .link:hover,
-.link:global(.active) {
+.link:global(.active),
+.dropdown:focus-within > .link {
     color: $color-primary-medium;
 }
 
 .solid .link:hover,
-.solid .link:global(.active) {
+.solid .link:global(.active),
+.solid .dropdown:focus-within > .link {
     color: $color-primary-light;
 }
 
 .dropdown {
     position: relative;
+
+    > .link:focus {
+        outline: none;
+    }
 }
 
 .menu {
